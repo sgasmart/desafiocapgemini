@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>CONTA FÁCIL</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/signin.css" rel="stylesheet">
+  </head>
+
+  <body class="text-center" onLoad="getSaldo();">
+    <form class="form-signin">
+	  <div id="result"></div>
+	  <h5 class="h5 mb-3 font-weight-normal" id="cliente"></h5>
+      <h5 class="h5 mb-3 font-weight-normal">Seu saldo é de: </h5>
+	  <h2 class="h2 mb-3 font-weight-normal" id="saldo"> </h2>
+	  <h5 class="h5 mb-3 font-weight-normal" id="acao"></h5>
+	  <label for="inputPassword" class="sr-only">Valor</label>
+	  <input type="hidden" id="action" name="action">
+      <input type="text" id="inputValor" name="inputValor" class="form-control" placeholder="Informe o valor" required>
+      <button class="btn btn-lg btn-primary btn-block" onClick="registrarMovimentacao();" type="button">Registrar</button>
+	  <br>
+	  <button class="btn btn-lg btn-primary btn-block" onClick="window.location='home.html'" type="button">Home</button>
+	  	  <button class="btn btn-lg btn-primary btn-block" onClick="sair();" type="button">Sair</button>
+      <p class="mt-5 mb-3 text-muted">&copy; 2020  copyright © Gilberto Silva <br>contato: (38) 9 9807-8478 <br> gilberto@sgasmanrt.com.br</p>
+    </form>
+	<script language="javascript">
+		// Check browser support
+		if (typeof(Storage) == "undefined") {
+		  document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
+		}
+		
+		function getSaldo() {
+			      
+				  fetch("http://localhost:57614/conta/validar?token="+localStorage.getItem('capgemini'), {
+					  headers: {
+						  "Content-Type": "application/json"
+					  }
+				  })
+				  .then(response =>response.json())
+				  .then(data => {
+					  //console.log(data);
+					  if(data.error=="false"){
+						   document.getElementById("cliente").innerHTML = data.msg.cliente;
+						   document.getElementById("saldo").innerHTML = "R$ "+data.msg.saldo;
+						   document.getElementById("acao").innerHTML =  getUrlVars()["acao"];
+			               document.getElementById("action").innerHTML =  getUrlVars()["acao"];
+					  }else{
+						   window.location.href = "index.html";
+					  }
+				  });
+				  return true;
+		 }
+		
+		 function registrarMovimentacao() {
+			  var vr = document.getElementById("inputValor").value;
+              fetch("http://localhost:57614/conta/setMovimentacao?acao="+getUrlVars()["acao"]+"&valor="+vr+"&token="+localStorage.getItem('capgemini'), {
+                  headers: {
+                      "Content-Type": "application/json"
+                  }
+              })
+              .then(response =>response.json())
+              .then(data => {
+                  //console.log(data);
+                  if(data.error=="false"){
+                       document.getElementById("cliente").innerHTML = data.msg.cliente;
+                       document.getElementById("saldo").innerHTML = "R$ "+data.msg.saldo;
+                       document.getElementById("acao").innerHTML =  getUrlVars()["acao"];
+                       document.getElementById("action").innerHTML =  getUrlVars()["acao"];
+                  }else{
+                       window.location.href = "index.html";
+                  }
+              })
+              .catch(function(error) {
+                  console.log('There has been a problem with your fetch operation: ' + error.message);
+              });
+			  return true;
+
+
+		 }
+	     function sair(){
+			 localStorage.clear();
+			 window.location.href = "index.html";
+		 }
+		function getUrlVars() {
+			var vars = {};
+			var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+				vars[key] = value;
+		});
+    return vars;
+}
+	  </script>'
+	  
+  </body>
+</html>
+<script src="js/jquery-3.4.1.min.js"></script>

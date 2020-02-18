@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="favicon.ico">
+
+    <title>Entrar</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/signin.css" rel="stylesheet">
+  </head>
+
+  <body class="text-center">
+    <form class="form-signin">
+      <h1 class="h3 mb-3 font-weight-normal">Entre com CPF</h1>
+      <label for="inputCpf" class="sr-only">CPF</label>
+      <input type="text" id="inputCpf" name="inputCpf" class="form-control" placeholder="CPF" required autofocus>
+      <label for="inputPassword" class="sr-only">Senha</label>
+      <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Senha" required>
+
+      <button class="btn btn-lg btn-primary btn-block" onClick="efetuarLogin();" type="button">Entrar</button>
+      <p class="mt-5 mb-3 text-muted">&copy; 2020  copyright © Gilberto Reginaldo da Silva contato: (38)99807-8478 - gilberto@sgasmanrt.com.br</p>
+    </form>
+	
+	<script language="javascript">
+
+		function efetuarLogin() {
+
+			if ($("#inputCpf").attr("value") == "") {
+
+				alert("Entre com seu cpf.");
+
+				return false;
+
+			} else if ($("#inputPassword").attr("value") == "") {
+
+				alert("entre com sua senha.");
+
+				return false;
+
+			} else {
+				fetch("http://localhost:57614/conta/getConta?cpf="+document.getElementById("inputCpf").value+"&senha="+document.getElementById("inputPassword").value, {
+					// NEW - add a Content-Type header
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+				.then(response =>response.json())
+				.then(data => {
+					console.log(data);
+					if(data.error=="false"){
+						 localStorage.setItem("capgemini",data.msg.token);
+						 window.location.href = "home.html";
+					}else{
+						alert(data.msg);
+					}
+				});
+				return true;
+			}
+
+		}
+
+    </script>
+	  
+  </body>
+</html>
+<script src="js/jquery-3.4.1.min.js"></script>

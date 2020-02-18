@@ -1,0 +1,31 @@
+banco de daddos capgemini
+
+CREATE TABLE movimentacoes
+(
+    id_movimentacao serial NOT NULL,
+    excluido character varying(1) COLLATE pg_catalog."default" DEFAULT 'N'::character varying,
+	data  timestamp without time zone,
+    id_conta integer,
+    conta character varying(14) COLLATE pg_catalog."default",
+    cpf character varying(14) COLLATE pg_catalog."default",
+    tipo character varying(30) COLLATE pg_catalog."default",
+    valor numeric(12,2) DEFAULT 0.00
+);
+
+CREATE TABLE contas
+(
+    id_conta serial NOT NULL,
+    excluido character varying(1) COLLATE pg_catalog."default" DEFAULT 'N'::character varying,
+    status character varying(10) COLLATE pg_catalog."default",
+    cliente character varying(255) COLLATE pg_catalog."default",
+    cpf character varying(14) COLLATE pg_catalog."default",
+    senha character varying(255) COLLATE pg_catalog."default",
+    conta character varying(40) COLLATE pg_catalog."default",
+    saldo numeric(12,2) DEFAULT 0.00,
+    movimentacao timestamp without time zone'
+);
+
+INSERT INTO public.contas(cliente, cpf, senha, conta, saldo)
+	VALUES ('ROGERIO BATISTA','00183812603', '202CB962AC59075B964B07152D234B70', '123472-1','4000');
+INSERT INTO public.contas(cliente, cpf, senha, conta, saldo)
+	VALUES ('GILBERTO REGINALDO DA SILVA','00123812603', '202CB962AC59075B964B07152D234B70', '128472-1','2000');
